@@ -7,7 +7,7 @@ export default function ResumeWindow({ onClose }: { onClose: () => void }) {
       <div className="p-4">
 
         <iframe
-          src="/resume.pdf" // Corrected path
+          src="/Aryan_Resume.pdf"
           width="100%"
           height="1090"
           title="Resume"

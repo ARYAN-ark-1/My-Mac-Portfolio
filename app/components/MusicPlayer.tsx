@@ -1,6 +1,5 @@
 'use client'
 
-/* Previous imports and interface declarations remain the same */
 import React, { useState, useRef, useEffect } from 'react'
 import { Play, Pause, SkipBack, SkipForward, Volume2, Volume1, VolumeX, Heart, Repeat, Shuffle, Minimize2 } from 'lucide-react'
 
@@ -15,12 +14,12 @@ interface Song {
 
 const songs: Song[] = [
   {
-    title: "Dawood",
-    artist: "Sidhu Moosewala",
-    album: "PBX1",
+    title: "Die with a smile",
+    artist: "Bruno Mars and Lady Gaga",
+    album: "Die With A Smile",
     duration: 180,
-    albumArt: "/pbx1.jpg",
-    src: "/Dawood.mp3"
+    albumArt: "/DWS.png",
+    src: "/Die-With-A-Smile(PagalNew.Com.Se).mp3"
   },
   {
     title: "MockinBird",
@@ -32,11 +31,9 @@ const songs: Song[] = [
   },
 ]
 
-export default function FullScreenMusicPlayer() {
-  // Previous state declarations and function definitions remain the same
+export default function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentSong, setCurrentSong] = useState(0)
-
   const [progress, setProgress] = useState(0)
   const [duration, setDuration] = useState(0)
   const [volume, setVolume] = useState(1)
@@ -72,9 +69,9 @@ export default function FullScreenMusicPlayer() {
   }
 
   const VolumeIcon = () => {
-    if (volume === 0) return <VolumeX size={16} className="text-green-500" />
-    if (volume < 0.5) return <Volume1 size={16} className="text-green-500" />
-    return <Volume2 size={16} className="text-green-500" />
+    if (volume === 0) return <VolumeX size={16} className="text-yellow-400" />
+    if (volume < 0.5) return <Volume1 size={16} className="text-yellow-400" />
+    return <Volume2 size={16} className="text-yellow-400" />
   }
 
   const nextSong = () => {
@@ -106,23 +103,21 @@ export default function FullScreenMusicPlayer() {
     }
   }, [currentSong])
 
-  // Calculate current time safely
   const currentTime = audioRef.current ? audioRef.current.currentTime : 0
   const progressValue = duration > 0 ? (currentTime / duration) * 100 : 0
 
   return (
-    <div className="fixed inset-0 text-gray-800 dark:text-white flex flex-col items-center justify-between p-8 px-6 md:px-20 overflow-hidden">
+    <div className="fixed inset-0 text-gray-800 dark:text-white flex flex-col items-center justify-between p-8 px-6 md:px-20 overflow-hidden bg-gradient-to-r from-purple-700 via-pink-500 to-orange-600">
       <div className="w-[70%] flex flex-col items-center min-h-screen">
-        {/* Previous sections remain the same */}
         {/* Album Art */}
         <div className="relative w-32 h-32 sm:w-64 sm:h-64 mb-4">
           <img 
             src={songs[currentSong].albumArt} 
             alt={songs[currentSong].album}
-            className="w-full h-full object-cover rounded-lg shadow-lg"
+            className="w-full h-full object-cover rounded-lg shadow-2xl"
           />
           <button 
-            className={`absolute top-2 right-2 p-1 rounded-full ${isLiked ? 'bg-red-500' : 'bg-white bg-opacity-20'}`}
+            className={`absolute top-2 right-2 p-1 rounded-full ${isLiked ? 'bg-red-600' : 'bg-white bg-opacity-30'}`}
             onClick={() => setIsLiked(!isLiked)}
           >
             <Heart size={16} className={isLiked ? 'text-white' : 'text-gray-200'} />
@@ -131,9 +126,9 @@ export default function FullScreenMusicPlayer() {
   
         {/* Song Info */}
         <div className="text-center mb-4">
-          <h2 className="text-lg font-bold mb-1 truncate w-48 sm:w-64">{songs[currentSong].title}</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1 truncate w-48 sm:w-64">{songs[currentSong].artist}</p>
-          <p className="text-xs text-gray-900 dark:text-gray-100 truncate w-48 sm:w-64">{songs[currentSong].album}</p>
+          <h2 className="text-2xl font-extrabold mb-1 truncate w-48 sm:w-64">{songs[currentSong].title}</h2>
+          <p className="text-md text-gray-100 dark:text-gray-300 mb-1 truncate w-48 sm:w-64">{songs[currentSong].artist}</p>
+          <p className="text-sm text-gray-300 dark:text-gray-200 truncate w-48 sm:w-64">{songs[currentSong].album}</p>
         </div>
   
         {/* Progress Bar */}
@@ -145,9 +140,9 @@ export default function FullScreenMusicPlayer() {
               min="0"
               max="100"
               value={progressValue || 0}
-              className="w-full h-1 bg-green-200 dark:bg-green-900 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:bg-green-500 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-moz-range-thumb]:bg-green-500 [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full"
+              className="w-full h-1 bg-green-300 dark:bg-green-800 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:bg-yellow-400 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full"
               style={{
-                backgroundImage: `linear-gradient(to right, #22c55e ${progressValue}%, #bbf7d0 ${progressValue}%)`
+                backgroundImage: `linear-gradient(to right, #fbbf24 ${progressValue}%, #fb923c ${progressValue}%)`
               }}
               onChange={(e) => {
                 if (audioRef.current) {
@@ -163,29 +158,29 @@ export default function FullScreenMusicPlayer() {
         {/* Controls */}
         <div className="flex justify-center items-center space-x-4 mb-4">
           <Shuffle 
-            size={16} 
-            className={`cursor-pointer ${isShuffled ? 'text-green-500' : 'dark:text-gray-400 text-gray-600 dark:hover:text-white hover:text-black'}`}
+            size={20} 
+            className={`cursor-pointer ${isShuffled ? 'text-yellow-400' : 'dark:text-gray-200 text-gray-600 dark:hover:text-white hover:text-black'}`}
             onClick={() => setIsShuffled(!isShuffled)}
           />
-          <SkipBack size={20} className="cursor-pointer dark:text-gray-400 text-gray-600 dark:hover:text-white hover:text-black" onClick={prevSong} />
+          <SkipBack size={22} className="cursor-pointer dark:text-gray-200 text-gray-600 dark:hover:text-white hover:text-black" onClick={prevSong} />
           <button 
             onClick={togglePlay}
-            className="bg-white dark:bg-gray-500 rounded-full p-2 hover:scale-105 transition-transform"
+            className="bg-white dark:bg-gray-700 rounded-full p-3 hover:scale-110 transition-transform"
           >
             {isPlaying ? 
-              <Pause size={20} className="dark:text-gray-400 text-gray-600 dark:hover:text-white hover:text-black" /> : 
-              <Play size={20} className="dark:text-gray-400 text-gray-600 dark:hover:text-white hover:text-black ml-0.5" />
+              <Pause size={24} className="text-gray-800 dark:text-white hover:text-black" /> : 
+              <Play size={24} className="text-gray-800 dark:text-white hover:text-black" />
             }
           </button>
-          <SkipForward size={20} className="cursor-pointer dark:text-gray-400 text-gray-600 dark:hover:text-white hover:text-black" onClick={nextSong} />
+          <SkipForward size={22} className="cursor-pointer dark:text-gray-200 text-gray-600 dark:hover:text-white hover:text-black" onClick={nextSong} />
           <Repeat 
-            size={16} 
-            className={`cursor-pointer ${repeatMode > 0 ? 'text-green-500' : 'dark:text-gray-400 text-gray-600 dark:hover:text-white hover:text-black'}`}
+            size={20} 
+            className={`cursor-pointer ${repeatMode > 0 ? 'text-yellow-400' : 'dark:text-gray-200 text-gray-600 dark:hover:text-white hover:text-black'}`}
             onClick={() => setRepeatMode((prev) => (prev + 1) % 3)}
           />
         </div>
   
-        {/* Volume Control - Updated with green styling */}
+        {/* Volume Control */}
         <div className="flex items-center justify-center space-x-2">
           <VolumeIcon />
           <input
@@ -194,9 +189,9 @@ export default function FullScreenMusicPlayer() {
             max="1"
             step="0.01"
             value={volume}
-            className="w-20 h-1 bg-green-200 dark:bg-green-900 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:bg-green-500 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-moz-range-thumb]:bg-green-500 [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full"
+            className="w-20 h-1 bg-yellow-300 dark:bg-yellow-800 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:bg-yellow-400 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full"
             style={{
-              backgroundImage: `linear-gradient(to right, #22c55e ${volume * 100}%, #bbf7d0 ${volume * 100}%)`
+              backgroundImage: `linear-gradient(to right, #fbbf24 ${volume * 100}%, #fb923c ${volume * 100}%)`
             }}
             onChange={handleVolumeChange}
           />
@@ -204,7 +199,7 @@ export default function FullScreenMusicPlayer() {
       </div>
   
       {/* Minimize Button */}
-      <button className="absolute top-2 right-2 text-gray-400 hover:text-white">
+      <button className="absolute top-2 right-2 text-gray-200 hover:text-white">
         <Minimize2 size={16} />
       </button>
   
@@ -227,7 +222,6 @@ export default function FullScreenMusicPlayer() {
               audioRef.current.play()
             }
           } else {
-            console.log(progress);
             nextSong()
           }
         }}

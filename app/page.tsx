@@ -11,7 +11,7 @@ import VSCodeEditor from "./components/VSCodeEditor";
 import GeminiChat from "./components/BrowserWindow";
 import Terminal from "./components/Terminal";
 import ResumeWindow from "./components/ResumeWindow";
-import wallpaper3 from "@/public/wallpaper-white.jpg";
+import wallpaper3 from "@/public/wallpaper1.jpg";
 import wallpaper2 from "@/public/wallpaper2.jpg";
 import wallpaper from "@/public/wallpaper3.jpg";
 import wallpaper4 from "@/public/wallpaper4.jpg";
@@ -24,6 +24,8 @@ import MusicPlayer from "./components/MusicPlayer";
 import ProfileCard from "./components/AboutMe";
 import ConnectWithMe from "./components/Social";
 import Projects from "./components/Project";
+import FullScreenMusicPlayer from "./components/musicPlaylists";
+
 
 
 export default function Home() {
@@ -85,6 +87,7 @@ export default function Home() {
         ) : (
           <>
             <MenuBar switchWallpaper={switchWallpaper} />
+            <FullScreenMusicPlayer/>
             <Desktop toggleWindow={toggleWindow} />
             {openWindows.includes("about") && (
               <Window

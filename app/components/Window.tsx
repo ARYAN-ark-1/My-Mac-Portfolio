@@ -133,7 +133,6 @@ export default function Window({ children, onClose }: WindowProps) {
         top: `${position.y}px`,
         width: `${size.width}px`,
         height: `${size.height}px`,
-      
         transition:
           isMaximized || isMinimized
             ? "width 0.3s ease, height 0.3s ease"
@@ -146,24 +145,24 @@ export default function Window({ children, onClose }: WindowProps) {
       >
         <div className="flex items-center space-x-2">
           <button
-            className="w-5 h-5 sm:w-4 sm:h-4 lg:w-3 lg:h-3 rounded-full bg-red-500 flex items-center justify-center"
+            className="w-5 h-5 sm:w-6 sm:h-6 lg:w-6 lg:h-6 rounded-full bg-red-500 flex items-center justify-center"
             onClick={onClose}
           >
-            <X className="w-6 h-6 sm:p-0.5 p-1 sm:w-5 sm:h-5 text-white dark:text-black" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5 text-white dark:text-black" />
           </button>
 
           <button
-            className="w-5 h-5 sm:w-4 sm:h-4 lg:w-3 lg:h-3 rounded-full bg-yellow-500 flex items-center justify-center"
+            className="w-5 h-5 sm:w-6 sm:h-6 lg:w-6 lg:h-6 rounded-full bg-yellow-500 flex items-center justify-center"
             onClick={handleMinimize}
           >
-            <Minus className="w-6 h-6 sm:p-0.5 p-1 sm:w-5 sm:h-5 text-white dark:text-black" />
+            <Minus className="w-4 h-4 sm:w-5 sm:h-5 text-white dark:text-black" />
           </button>
 
           <button
-            className="w-5 h-5 sm:w-4 sm:h-4 lg:w-3 lg:h-3 rounded-full bg-green-500 flex items-center justify-center"
+            className="w-5 h-5 sm:w-6 sm:h-6 lg:w-6 lg:h-6 rounded-full bg-green-500 flex items-center justify-center"
             onClick={handleMaximize}
           >
-            <Square className="w-6 h-6 sm:p-0.5 p-1 sm:w-5 sm:h-5 text-white dark:text-black" />
+            <Square className="w-4 h-4 sm:w-5 sm:h-5 text-white dark:text-black" />
           </button>
         </div>
       </div>

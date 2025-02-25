@@ -13,10 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ekas Portfolio",
-  description: "A digital masterpiece showcasing creativity, innovation, and expertise. Crafted with passion and precision for a unique online presence.",
+  title: "Aryan's MAC",
 };
-
 
 export default function RootLayout({
   children,

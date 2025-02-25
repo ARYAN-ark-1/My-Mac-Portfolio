@@ -1,8 +1,6 @@
 import {
   Github,
   Linkedin,
-  Twitter,
-  Instagram,
   Mail,
   ArrowRight,
 } from "lucide-react";
@@ -11,34 +9,23 @@ const socialLinks = [
   {
     icon: <Github className="w-6 h-6" />,
     label: "GitHub",
-    url: "github.com/ekas-7",
+    url: "github.com/ARYAN-ark-1",
     color: "hover:text-purple-600 dark:hover:text-purple-400",
   },
   {
     icon: <Linkedin className="w-6 h-6" />,
     label: "LinkedIn",
-    url: "linkedin.com/in/ekas7",
+    url: "linkedin.com/in/aryan-1b8059276",
     color: "hover:text-blue-600 dark:hover:text-purple-400",
-  },
-  {
-    icon: <Twitter className="w-6 h-6" />,
-    label: "X",
-    url: "twitter.com/Ekas_7",
-    color: "hover:text-sky-500 dark:hover:text-purple-400",
-  },
-  {
-    icon: <Instagram className="w-6 h-6" />,
-    label: "Instagram",
-    url: "instagram.com/ekas_7",
-    color: "hover:text-pink-600 dark:hover:text-purple-400",
   },
   {
     icon: <Mail className="w-6 h-6" />,
     label: "Email",
-    url: "mailto:ekasatwal.work@gmail.com",
+    url: "mailto:aryanmalik20197@gmail.com",
     color: "hover:text-red-500 dark:hover:text-purple-400",
   },
 ];
+
 const ConnectWithMe = () => {
   return (
     <div className="max-w-2xl mx-auto sm:p-8 p-4">

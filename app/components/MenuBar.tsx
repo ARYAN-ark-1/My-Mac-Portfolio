@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   Wifi,
   WifiOff,
@@ -10,10 +10,7 @@ import {
   Settings,
   Maximize2,
   Minimize2,
-  LucideCopyright,
-  ChevronDown,
-  X
-} from "lucide-react"; // Import close icon
+} from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
 import Calendar from "./Calendar";
 import WallpaperSelector from "./WallpaperSel";
@@ -23,7 +20,7 @@ interface ThemeContextType {
   toggleTheme: () => void;
 }
 interface MenuBarProps {
-  switchWallpaper: (wallpaperSrc: string) => void; // Define the prop type
+  switchWallpaper: (wallpaperSrc: string) => void;
 }
 
 const MenuBar: React.FC<MenuBarProps> = ({ switchWallpaper }) => {
@@ -33,29 +30,10 @@ const MenuBar: React.FC<MenuBarProps> = ({ switchWallpaper }) => {
   const wifiStrength: number = 3;
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
-  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [isWallpaperSelectorOpen, setIsWallpaperSelectorOpen] = useState(false);
 
-  
-
-  const handleCloseWallpaperSelector = (): void => {
-    setIsWallpaperSelectorOpen(false);
-  };
-
-  const handleSelectWallpaper = (wallpaper: string): void => {
-    // Call the passed switchWallpaper function to change the wallpaper
-    switchWallpaper(wallpaper);
-    setIsWallpaperSelectorOpen(false); // Close the wallpaper selector after selection
-  };
-  const drawerRef = useRef<HTMLDivElement>(null);
-  const startY = useRef<number>(0);
-  const currentY = useRef<number>(0);
-
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setDateTime(new Date());
-    }, 1000);
-
+    const intervalId = setInterval(() => setDateTime(new Date()), 1000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -63,47 +41,17 @@ const MenuBar: React.FC<MenuBarProps> = ({ switchWallpaper }) => {
     const batteryInterval = setInterval(() => {
       setBatteryLevel((prev) => (prev > 10 ? prev - 1 : 100));
     }, 5000);
-
     return () => clearInterval(batteryInterval);
   }, []);
 
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>): void => {
-    startY.current = e.touches[0].clientY;
-    currentY.current = e.touches[0].clientY;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>): void => {
-    currentY.current = e.touches[0].clientY;
-    const deltaY = currentY.current - startY.current;
-    
-    if (deltaY > 0 && deltaY < 300 && drawerRef.current) {
-      drawerRef.current.style.transform = `translateY(${deltaY}px)`;
-    }
-  };
-
-  const handleTouchEnd = (): void => {
-    const deltaY = currentY.current - startY.current;
-    if (!drawerRef.current) return;
-
-    if (deltaY > 50) {
-      setIsDrawerOpen(true);
-      drawerRef.current.style.transform = 'translateY(100%)';
-    } else {
-      setIsDrawerOpen(false);
-      drawerRef.current.style.transform = 'translateY(0)';
-    }
-  };
-
-  const handleDrawerClose = (): void => {
-    setIsDrawerOpen(false);
-    if (drawerRef.current) {
-      drawerRef.current.style.transform = 'translateY(-100%)';
-    }
-  };
   const handleOpenWallpaperSelector = (): void => {
-    handleDrawerClose();
     setIsWallpaperSelectorOpen(true);
   };
+
+  const handleCloseWallpaperSelector = (): void => {
+    setIsWallpaperSelectorOpen(false);
+  };
+
   const handleCalendarClick = (): void => {
     setIsCalendarOpen(!isCalendarOpen);
   };
@@ -115,21 +63,6 @@ const MenuBar: React.FC<MenuBarProps> = ({ switchWallpaper }) => {
       await document.documentElement.requestFullscreen();
     }
     setIsFullscreen(!isFullscreen);
-  };
-
-  const renderBatteryIcon = (): React.ReactNode => {
-    if (batteryLevel > 80)
-      return <BatteryFull className="sm:w-4 w-6 sm:h-4 h-6 text-black dark:text-white" />;
-    if (batteryLevel > 30)
-      return <BatteryCharging className="sm:w-4 w-6 sm:h-4 h-6 text-black dark:text-white" />;
-    return <BatteryLow className="sm:w-4 w-6 sm:h-4 h-6 text-red-500" />;
-  };
-
-  const renderWifiIcon = (): React.ReactNode => {
-    if (wifiStrength === 3) return <Wifi className="sm:w-4 w-6 sm:h-4 h-6 text-black dark:text-white" />;
-    if (wifiStrength === 2) return <Wifi className="sm:w-4 w-6 sm:h-4 h-6 text-yellow-500" />;
-    if (wifiStrength === 1) return <Wifi className="sm:w-4 w-6 sm:h-4 h-6 text-red-500" />;
-    return <WifiOff className="sm:w-4 w-6 sm:h-4 h-6 text-gray-500" />;
   };
 
   const formatDate = (date: Date): string => {
@@ -149,163 +82,106 @@ const MenuBar: React.FC<MenuBarProps> = ({ switchWallpaper }) => {
 
   return (
     <>
+      {/* 🌟 Menu Bar */}
       <div
-        className={`fixed top-0 left-0 right-0 sm:h-8 h-9 ${
+        className={`fixed top-0 left-0 right-0 h-8 flex items-center px-4 z-50 backdrop-blur-xl transition-colors duration-300 ${
           theme === "light"
             ? "bg-gradient-to-br from-white/70 to-gray-100/70 text-black"
             : "bg-gradient-to-br from-gray-900/70 to-gray-800/70 text-white"
-        } backdrop-blur-xl flex items-center sm:justify-between px-4 z-50 transition-colors duration-300 justify-evenly`}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
+        }`}
       >
-        <div className="flex items-center space-x-2">
-          <span className="hidden sm:block text-sm">Ekaspreet Singh Atwal</span>
-          <LucideCopyright className="sm:h-4 h-5 sm:w-4 w-5 font-thin hidden sm:block"/>
-          <span className="hidden sm:block text-sm ">2025</span>
+        {/* 🔹 Apple Logo */}
+        <div className="flex items-center space-x-4">
+          <img src="/logo26.svg" alt="Apple Logo" className="w-5 h-5" />
+
+          {/* 🔹 macOS Menu Items (Hidden on mobile) */}
+          <div className="hidden md:flex items-center space-x-6 text-sm">
+            {["File", "Edit", "View", "Go", "Window", "Help"].map((item) => (
+              <div
+                key={item}
+                className="cursor-pointer hover:text-gray-400 transition"
+              >
+                {item}
+              </div>
+            ))}
+          </div>
         </div>
-        
-        <div className="flex items-center space-x-4 sm:space-x-2">
-          <ChevronDown className="sm:hidden w-6 h-6" />
+
+        {/* 🔹 Right Section (WiFi, Battery, Time) */}
+        <div className="flex items-center space-x-4 ml-auto">
+          {/* 🔆 Theme Toggle */}
           <button
             onClick={toggleTheme}
-            aria-label="Toggle theme"
-            className="p-1 rounded-full hover:bg-gray-200/50 dark:hover:bg-black/25 transition-colors"
+            className="p-1 rounded-full hover:bg-gray-200/50 dark:hover:bg-black/25 transition"
           >
-            {theme === "light" ? (
-              <Moon className="sm:w-4 w-6 sm:h-4 h-6" />
-            ) : (
-              <Sun className="sm:w-4 w-6 sm:h-4 h-6" />
-            )}
+            {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
           </button>
-          
+
+          {/* ⚙️ Wallpaper Selector */}
           <Settings
-            onClick={handleOpenWallpaperSelector} // Open the wallpaper selector when clicked
-            className="sm:w-4 w-6 sm:h-4 h-6 hover:scale-110 transition-transform"
+            onClick={handleOpenWallpaperSelector}
+            className="w-5 h-5 cursor-pointer hover:scale-110 transition"
           />
-          
+
+          {/* 🔋 Battery Status */}
           <div className="relative group">
-            {renderBatteryIcon()}
-            <span className="absolute top-7 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+            {batteryLevel > 80 ? (
+              <BatteryFull className="w-5 h-5 text-black dark:text-white" />
+            ) : batteryLevel > 30 ? (
+              <BatteryCharging className="w-5 h-5 text-black dark:text-white" />
+            ) : (
+              <BatteryLow className="w-5 h-5 text-red-500" />
+            )}
+            <span className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
               {batteryLevel}%
             </span>
           </div>
 
+          {/* 📶 WiFi Status */}
           <div className="relative group">
-            {renderWifiIcon()}
-            <span className="absolute top-7 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+            {wifiStrength === 3 ? (
+              <Wifi className="w-5 h-5 text-black dark:text-white" />
+            ) : wifiStrength === 2 ? (
+              <Wifi className="w-5 h-5 text-yellow-500" />
+            ) : wifiStrength === 1 ? (
+              <Wifi className="w-5 h-5 text-red-500" />
+            ) : (
+              <WifiOff className="w-5 h-5 text-gray-500" />
+            )}
+            <span className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
               {`${wifiStrength * 33}%`}
             </span>
           </div>
 
-          <div className="relative">
-            <button
-              onClick={handleCalendarClick}
-              aria-label="Toggle calendar"
-              className={`text-md sm:text-sm ${theme === "light" ? "text-black" : "text-white"}`}
-            >
-              {formatDate(dateTime)}
-            </button>
-            {isCalendarOpen && (
-              <div className="absolute top-8 left-[0%] transform -translate-x-1/2 z-10 sm:block hidden">
-                <Calendar />
-              </div>
-            )}
-          </div>
+          {/* 📅 Date & Time */}
+          <button onClick={handleCalendarClick} className="text-sm">
+            {formatDate(dateTime)}
+          </button>
+          <span className="text-sm">{formatTime(dateTime)}</span>
 
-          <div className="relative">
-            <button
-              aria-label="Display time"
-              className={`sm:text-sm text-md ${theme === "light" ? "text-black" : "text-white"}`}
-            >
-              {formatTime(dateTime)}
-            </button>
-          </div>
-
+          {/* 🔳 Fullscreen Toggle */}
           <button
             onClick={handleFullscreenToggle}
-            aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-            className="p-1 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-colors hidden sm:block"
+            className="p-1 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition hidden sm:block"
           >
-            {isFullscreen ? (
-              <Minimize2 className="sm:w-4 w-6 sm:h-4 h-6" />
-            ) : (
-              <Maximize2 className="sm:w-4 w-6 sm:h-4 h-6" />
-            )}
+            {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
-      <div
-        ref={drawerRef}
-        className={`fixed top-9 left-0 right-0 sm:hidden ${
-          theme === "light" ? "bg-white" : "bg-gray-900"
-        } shadow-lg transition-transform duration-300 ease-in-out z-40`}
-        style={{
-          transform: isDrawerOpen ? 'translateY(100%)' : 'translateY(-100%)',
-          height: 'auto',
-          maxHeight: '80vh'
-        }}
-      >
-        <div className="p-4 space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="font-semibold">Ekaspreet Singh Atwal</span>
-            <div className="flex items-center space-x-2">
-              <LucideCopyright className="h-4 w-4" />
-              <span>2025</span>
-            </div>
-            <button onClick={handleDrawerClose} aria-label="Close Drawer" className="p-1 rounded-full">
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-
-          <div className="flex flex-col space-y-4">
-            <button
-              onClick={toggleTheme}
-              className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              {theme === "light" ? (
-                <>
-                  <Moon className="w-6 h-6" />
-                  <span>Dark Mode</span>
-                </>
-              ) : (
-                <>
-                  <Sun className="w-6 h-6" />
-                  <span>Light Mode</span>
-                </>
-              )}
-            </button>
-            
-            
-          <div className="flex items-center space-x-2 p-2"  onClick={handleOpenWallpaperSelector } >
-          <Settings
-           // Open the wallpaper selector when clicked
-            className="h-6 w-6"
-          />
-              <span>Change Background</span>
-            </div>
-            <div className="flex items-center space-x-2 p-2">
-              {renderBatteryIcon()}
-              <span>Battery: {batteryLevel}%</span>
-            </div>
-
-            <div className="flex items-center space-x-2 p-2">
-              {renderWifiIcon()}
-              <span>WiFi Strength: {wifiStrength * 33}%</span>
-            </div>
-
-            <div className="p-2">
-              <Calendar />
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* 📌 Wallpaper Selector */}
       {isWallpaperSelectorOpen && (
         <WallpaperSelector
-          onSelectWallpaper={handleSelectWallpaper}
+          onSelectWallpaper={switchWallpaper}
           closeWindow={handleCloseWallpaperSelector}
         />
+      )}
+
+      {/* 📌 Calendar (Dropdown) */}
+      {isCalendarOpen && (
+        <div className="absolute top-10 right-10 z-10">
+          <Calendar />
+        </div>
       )}
     </>
   );

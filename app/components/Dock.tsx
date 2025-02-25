@@ -1,31 +1,26 @@
-import { 
-  Music, 
-  Code, 
-  Globe, 
-  Terminal,
-  User,
-  Briefcase,
-  Mail,
-  File // Import File icon
-} from 'lucide-react'
-import {  ReactNode } from 'react'
-
+import { ReactNode, useState } from 'react';
+import { Terminal, Mail, Music, Globe, User, File, Briefcase } from 'lucide-react';
 
 interface DockItemProps {
   label: string;
   onClick: () => void;
   children: ReactNode;
+  showLabel: boolean; // Add showLabel prop
 }
+
+const openGithub = () => {
+  window.open('https://github.com/ARYAN-ark-1', '_blank');
+};
 
 interface DockProps {
   toggleWindow: (id: string) => void;
 }
 
-const DockItem = ({ label, onClick, children }: DockItemProps) => (
+const DockItem = ({ label, onClick, children, showLabel }: DockItemProps) => (
   <div className="group relative flex flex-col items-center">
     <button
       onClick={onClick}
-      className="relative w-10 h-10 sm:w-10 sm:h-10 rounded-xl 
+      className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl 
         bg-gradient-to-br from-gray-100/50 to-white/50 dark:from-gray-800/50 dark:to-gray-900/50 
         backdrop-blur-lg flex items-center justify-center text-lg sm:text-xl 
         border border-black/5 dark:border-white/10 
@@ -36,73 +31,110 @@ const DockItem = ({ label, onClick, children }: DockItemProps) => (
     >
       {children}
     </button>
-    <div className="absolute -top-10 scale-0 group-hover:scale-100 transition-all duration-200">
-      <div className="relative px-2 py-1 bg-white dark:bg-gray-900 text-gray-900 dark:text-white 
-        rounded-lg text-xs font-medium shadow-lg">
-        {label}
-        <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 
-          bg-white dark:bg-gray-900 rotate-45"></div>
-      </div>
-    </div>
+    {showLabel && (
+      <span className="mt-2 text-sm text-gray-900 dark:text-white">{label}</span>
+    )}
   </div>
-)
+);
 
 export default function Dock({ toggleWindow }: DockProps) {
-  
+  const [isLaunchpadOpen, setLaunchpadOpen] = useState(false);
+  const [showExtraIcons, setShowExtraIcons] = useState(false);
+
+  const toggleLaunchpad = () => {
+    setLaunchpadOpen((prev) => !prev);
+    setShowExtraIcons((prev) => !prev); // Toggle extra icons
+  };
 
   return (
-    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-auto ">
-      <div className=" flex items-center xs:gap-1.5  sm:gap-3 sm:px-4 py-2 px-2 gap-1
-        bg-gradient-to-br from-white/70 to-gray-100/70 
-        dark:from-gray-900/70 dark:to-gray-800/70 
-        backdrop-blur-xl rounded-xl shadow-2xl 
-        border border-black/5 dark:border-white/10 
-        transition-all duration-300"
-        
+    <>
+      {/* Full-screen Launchpad Overlay */}
+      {isLaunchpadOpen && (
+        <div
+          className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-xl bg-black/50"
+          onClick={() => {
+            setLaunchpadOpen(false);
+            setShowExtraIcons(false);
+          }} // Close on click outside the overlay
         >
-        <DockItem label="About" onClick={() => toggleWindow('about')}>
-          <User className="w-5 h-5 sm:w-5 sm:h-5 text-gray-600/80 dark:text-white/80 
-            group-hover:text-gray-900 dark:group-hover:text-white" />
-        </DockItem>
+          <div className="w-full max-w-lg bg-gray-100 dark:bg-gray-900 p-5 rounded-lg shadow-lg">
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-6 p-4">
+              <DockItem label="Terminal" onClick={() => toggleWindow('terminal')} showLabel={true}>
+                <img src="/icons/terminal.avif" alt="Terminal" className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg" />
+              </DockItem>
 
-        <DockItem label="Projects" onClick={() => toggleWindow('projects')}>
-          <Briefcase className="w-5 h-5 sm:w-5 sm:h-5 text-gray-600/80 dark:text-white/80 
-            group-hover:text-gray-900 dark:group-hover:text-white" />
-        </DockItem>
+              <DockItem label="Contact" onClick={() => toggleWindow('contact')} showLabel={true}>
+                <Mail className="w-12 h-12 sm:w-14 sm:h-14 text-gray-600 dark:text-white" />
+              </DockItem>
 
-        <DockItem label="Contact" onClick={() => toggleWindow('contact')}>
-          <Mail className="w-5 h-5 sm:w-5 sm:h-5 text-gray-600/80 dark:text-white/80 
-            group-hover:text-gray-900 dark:group-hover:text-white" />
-        </DockItem>
+              <DockItem label="Music" onClick={() => toggleWindow('music-player')} showLabel={true}>
+                <Music className="w-12 h-12 sm:w-14 sm:h-14 text-gray-600 dark:text-white" />
+              </DockItem>
 
-        <DockItem label="Music" onClick={() => toggleWindow('music-player')}>
-          <Music className="w-5 h-5 sm:w-5 sm:h-5 text-gray-600/80 dark:text-white/80 
-            group-hover:text-gray-900 dark:group-hover:text-white" />
-        </DockItem>
+              <DockItem label="Browser" onClick={() => toggleWindow('browser')} showLabel={true}>
+                <Globe className="w-12 h-12 sm:w-14 sm:h-14 text-gray-600 dark:text-white" />
+              </DockItem>
 
-        <DockItem label="VSCode" onClick={() => toggleWindow('vscode')}>
-          <Code className="w-5 h-5 sm:w-5 sm:h-5 text-gray-600/80 dark:text-white/80 
-            group-hover:text-gray-900 dark:group-hover:text-white" />
-        </DockItem>
+              <DockItem label="GitHub" onClick={openGithub} showLabel={true}>
+                <img src="/icons/github.png" alt="Github" className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg" />
+              </DockItem>
 
-        <DockItem label="Browser" onClick={() => toggleWindow('browser')}>
-          <Globe className="w-5 h-5 sm:w-5 sm:h-5 text-gray-600/80 dark:text-white/80 
-            group-hover:text-gray-900 dark:group-hover:text-white" />
-        </DockItem>
+              {/* Additional Icons - Shown when Launchpad is open */}
+              {showExtraIcons && (
+                <>
+                  <DockItem label="About Me" onClick={() => toggleWindow('about')} showLabel={true}>
+                    <User className="w-12 h-12 sm:w-14 sm:h-14 text-gray-600 dark:text-white" />
+                  </DockItem>
 
-        <DockItem label="Terminal" onClick={() => toggleWindow('terminal')}>
-          <Terminal className="w-5 h-5 sm:w-5 sm:h-5 text-gray-600/80 dark:text-white/80 
-            group-hover:text-gray-900 dark:group-hover:text-white" />
-        </DockItem>
+                  <DockItem label="Projects" onClick={() => toggleWindow('projects')} showLabel={true}>
+                    <Briefcase className="w-12 h-12 sm:w-14 sm:h-14 text-gray-600 dark:text-white" />
+                  </DockItem>
 
-        {/* Added Resume item */}
-        <DockItem label="Resume" onClick={() => toggleWindow('resume')}>
-          <File className="w-5 h-5 sm:w-5 sm:h-5 text-gray-600/80 dark:text-white/80 
-            group-hover:text-gray-900 dark:group-hover:text-white" />
-        </DockItem>
+                  <DockItem label="Resume" onClick={() => toggleWindow('resume')} showLabel={true}>
+                    <File className="w-12 h-12 sm:w-14 sm:h-14 text-gray-600 dark:text-white" />
+                  </DockItem>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Dock */}
+      <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-auto">
+        <div className="flex items-center gap-2 sm:gap-3 px-4 py-2
+          bg-gradient-to-br from-white/80 to-gray-100/80 
+          dark:from-gray-900/80 dark:to-gray-800/80 
+          backdrop-blur-lg rounded-xl shadow-2xl border border-black/5 dark:border-white/10 
+          transition-all duration-300"
+        >
+          {/* Launchpad Icon */}
+          <DockItem label="Launchpad" onClick={toggleLaunchpad} showLabel={false}>
+            <img src="/icons/launchpad.png" alt="Launchpad" className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg" />
+          </DockItem>
+
+          {/* Other icons */}
+          <DockItem label="Terminal" onClick={() => toggleWindow('terminal')} showLabel={false}>
+            <img src="/icons/terminal.avif" alt="Terminal" className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg" />
+          </DockItem>
+
+          <DockItem label="Contact" onClick={() => toggleWindow('contact')} showLabel={false}>
+            <Mail className="w-10 h-10 sm:w-12 sm:h-12 text-gray-600 dark:text-white" />
+          </DockItem>
+
+          <DockItem label="Music" onClick={() => toggleWindow('music-player')} showLabel={false}>
+            <Music className="w-10 h-10 sm:w-12 sm:h-12 text-gray-600 dark:text-white" />
+          </DockItem>
+
+          <DockItem label="Browser" onClick={() => toggleWindow('browser')} showLabel={false}>
+            <Globe className="w-10 h-10 sm:w-12 sm:h-12 text-gray-600 dark:text-white" />
+          </DockItem>
+
+          <DockItem label="GitHub" onClick={openGithub} showLabel={false}>
+            <img src="/icons/github.png" alt="Github" className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg" />
+          </DockItem>
+        </div>
       </div>
-
-      
-    </div>
-  )
+    </>
+  );
 }

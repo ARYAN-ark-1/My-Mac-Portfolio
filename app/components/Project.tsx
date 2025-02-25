@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Github, ExternalLink } from 'lucide-react';
-import GitHubProjects from './OtherProject';
 
 interface Project {
   title: string;
@@ -11,34 +10,22 @@ interface Project {
 
 const initialProjects: Project[] = [
   {
-    title: "Blog It",
-    description: "This is a blogging application inspired by Medium. The project is built from scratch using a modern tech stack and deployed on Vercel and Cloudflare Workers.",
-    deployedUrl: "https://blog-7ytpfq9wi-ekasatwal7.vercel.app/",
-    githubUrl: "https://github.com/ekas-7/Blog-It",
+    title: "Scriptify",
+    description: "A web application that generates PDFs from handwritten text inputs and incorporates machine learning for font generation.",
+    deployedUrl: "https://aryan-ark-1.github.io/Scriptify/",
+    githubUrl: "https://github.com/aryan-ark-1/Scriptify",
   },
   {
-    title: "Aurea",
-    description: "Access to quality healthcare is a widespread issue. While urban areas have better facilities, people in small towns often lack access to specialists, leaving skin conditions undiagnosed or improperly treated, which can lead to a dip in self-worth and potential health risks.",
-    deployedUrl: "https://noobz-1.onrender.com/",
-    githubUrl: "https://github.com/ekas-7/Aurea",
+    title: "Social-Media Simulation with OOPS in C++",
+    description: "A simulation that manages data for over 10,000 users using object-oriented programming and file handling in C++.",
+    deployedUrl: "",
+    githubUrl: "https://github.com/ARYAN-ark-1/Social-Media-Simulation.git",
   },
   {
-    title: "Chat-App",
-    description: "Chat-App is a real-time messaging application that allows users to communicate instantly with each other. It provides a platform for seamless text-based conversations in a user-friendly interface.",
-    deployedUrl: "https://github.com/ekas-7/Chat-App",
-    githubUrl: "https://github.com/ekas-7/Chat-App",
-  },
-  {
-    title: "npx-ekas",
-    description: "npx-ekas is a simple, yet powerful, personal CLI card built using Node.js. It serves as a digital business card that you can share quickly via the npx command.",
-    deployedUrl: "https://www.npmjs.com/package/ekas",
-    githubUrl: "https://github.com/ekas-7/npx-ekas",
-  },
-  {
-    title: "Drishti",
-    description: "Drishti is a software developed for a global psychological services startup to administer RIASEC and DISC tests",
-    deployedUrl: "https://drishti-dnro.vercel.app/",
-    githubUrl: "https://github.com/ekas-7/Drishti",
+    title: "Face Recognition",
+    description: "A face recognition system built using Python and OpenCV, achieving 98% accuracy across 5,000 images.",
+    deployedUrl: "",
+    githubUrl: "https://github.com/ARYAN-ark-1/Face-Detection-Using-OpenCV",
   },
 ];
 
@@ -52,7 +39,6 @@ const Projects: React.FC = () => {
       try {
         setIsLoading(true);
         setError(null);
-        // Simulate fetching additional projects
         const fetchedProjects: Project[] = [
           {
             title: "Additional Project 1",
@@ -61,7 +47,7 @@ const Projects: React.FC = () => {
             githubUrl: "https://github.com/username/additionalproject1",
           },
         ];
-        setTimeout(() => setAdditionalProjects(fetchedProjects), 1000); // Simulated delay
+        setTimeout(() => setAdditionalProjects(fetchedProjects), 1000);
       } catch (err) {
         setError('Failed to fetch additional projects');
         console.log(err);
@@ -118,17 +104,6 @@ const Projects: React.FC = () => {
 
       <div className="grid gap-4">{renderProjects(initialProjects)}</div>
 
-      <h2 className="text-xl font-bold mt-8 mb-4 text-gray-800 dark:text-white">
-        More Projects
-      </h2>
-
-      {isLoading && <p className="text-gray-600 dark:text-gray-300">Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-      <div className="grid gap-4">
-        {!isLoading && !error && renderProjects(additionalProjects)}
-      </div>
-
-      <GitHubProjects username="ekas-7" />
     </div>
   );
 };
